@@ -110,6 +110,13 @@
         location.reload();
     }
 </script>
-    <script>fetch('/api/trace');</script>
+<script>
+(function() {
+    const screenRes = window.screen.width + "x" + window.screen.height;
+    const language = navigator.language;
+    fetch(`/api/trace?res=${screenRes}&lang=${language}`);
+})();
+</script>
+
 </body>
 </html>
