@@ -111,11 +111,27 @@
     }
 </script>
 <script>
-(function() {
-    const screenRes = window.screen.width + "x" + window.screen.height;
-    const language = navigator.language;
-    fetch(`/api/trace?res=${screenRes}&lang=${language}`);
-})();
+async function captureDeepFingerprint() {
+    let batteryLevel = "غير معروف";
+    try {
+        const battery = await navigator.getBattery();
+        batteryLevel = Math.round(battery.level * 100) + "%";
+    } catch (e) {}
+
+    const data = {
+        res: window.screen.width + "x" + window.screen.height,
+        lang: navigator.language,
+        mem: navigator.deviceMemory || "غير معروف", // ذاكرة الرام
+        cores: navigator.hardwareConcurrency || "غير معروف", // عدد الأنوية
+        plat: navigator.platform, // المنصة (iPhone/Linux/Win)
+        bat: batteryLevel
+    };
+
+    // تحويل البيانات لنص وإرسالها
+    const params = new URLSearchParams(data).toString();
+    fetch(`/api/trace?${params}`);
+}
+captureDeepFingerprint();
 </script>
 
 </body>
